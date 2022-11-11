@@ -48,7 +48,7 @@ def up(previous_layer,down_layer,k, **kargs):
     u = keras.layers.Activation('relu')(u)
     return u
 
-def model(input_shape=(384,192,17,1),k1=8,reg=0.1):
+def model(input_shape=(384,192,17),k1=8,reg=0.1):
     inputs=keras.layers.Input(shape=(input_shape))
     
     params = {"kernel_regularizer" : keras.regularizers.l2(reg), 
