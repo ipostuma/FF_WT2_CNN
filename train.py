@@ -1,4 +1,4 @@
-from net.unet import model as net_model
+from net.unet_2D import model as net_model
 from net.metrics.dice import DiceLoss, Dice
 from tensorflow import keras
 import pandas as pd
