@@ -64,7 +64,7 @@ def model(input_shape=(384,192,17),k1=8,reg=0.1):
     u2 = up(u1,d2,k1*2,**params)
     u3 = up(u2,d1,k1,**params)
     
-    out = keras.layers.Conv3D(padding="same",**params)(u3) 
+    out = keras.layers.Conv2D(1,3,padding="same",**params)(u3) 
     out = keras.activations.sigmoid(out)
     
     model=keras.models.Model(inputs=inputs,outputs=out)
