@@ -55,7 +55,7 @@ def up(previous_layer,down_layer,k, **kargs):
     u = keras.layers.UpSampling2D()(res)
     return u
 
-def model(input_shape=(384,192,17),k1=8,reg=0.1):
+def model(input_shape=(384,192,17),k1=16,reg=0.0001):
     inputs=keras.layers.Input(shape=(input_shape))
     
     params = {"kernel_regularizer" : keras.regularizers.l2(reg), 
@@ -64,14 +64,16 @@ def model(input_shape=(384,192,17),k1=8,reg=0.1):
     d1 = down(inputs,k1,**params)
     d2 = down(d1,k1*2,**params) 
     d3 = down(d2,k1*4,**params) 
+    d4 = down(d3, k1*8, **params)
     
-    b = bottleneck(d3,k1*8,**params)
-        
-    u1 = up(b ,d3,k1*4,**params)
-    u2 = up(u1,d2,k1*2,**params)
-    u3 = up(u2,d1,k1,**params)
+    b = bottleneck(d4,k1*2,**params)
     
-    out = keras.layers.Conv2D(1,3,padding="same",**params)(u3) 
+    u1 = up(b,d4,k1*8,**params)    
+    u2 = up(u1,d3,k1*4,**params)
+    u3 = up(u2,d2,k1*2,**params)
+    u4 = up(u3,d1,k1,**params)
+    
+    out = keras.layers.Conv2D(1,3,padding="same",**params)(u4) 
     out = keras.activations.sigmoid(out)
     
     model=keras.models.Model(inputs=inputs,outputs=out)
